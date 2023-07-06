@@ -53,7 +53,7 @@ export default class Personagem{
 		var xPosition = this.position[0] - canvasPosition[0]
 		if(this.direction == -1){
 			ctx.scale(-1,1);
-			xPosition = -(this.position[0]+this.size[0]- canvasPosition[0] )
+			xPosition = -(this.position[0]+this.size[0] - canvasPosition[0] )
 		}
 
 		
@@ -246,7 +246,7 @@ export default class Personagem{
 		//}
 		
 		
-		//this.limits(limits);
+		this.limits(limits);
 		
 
 		if(!this.jumping){
@@ -303,10 +303,11 @@ export default class Personagem{
 		if(colidio == 2){
 			//p.color = "#ff0"
 			//console.log(p.position)
-			//console.log(this.position)
+			
 			return true;
 		}
-
+		return false
+		console.log("fora da tela")
 
 	}
 }

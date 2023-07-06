@@ -15,28 +15,22 @@ let boundaries;
 let ctxPosition = [0,0];
 let plataformas = [];
 
+const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+
 const loop = () => {
 	setTimeout(() => {
 		CTX.clearRect(0, 0, CANVAS.width, CANVAS.height)
-
-		plataformas.forEach(plataforma =>{
-			plataforma.draw(CTX,ctxPosition)
-		})
-
-		teste.move(boundaries, keys,plataformas);
-
-		//plataformas.forEach(plataforma =>{
-		//	plataforma.colide(teste)
-		//})
-		
+		teste.move(boundaries, keys,plataformas);	
 		teste.draw(CTX,ctxPosition);
-		//console.log(keys);
-
-		ctxPosition[0] = - 350;
-		ctxPosition[0] = +teste.position[0]-350
+		ctxPosition[0] = + teste.position[0]-350
 		if(ctxPosition[0] < 0)
 			ctxPosition[0] = 0
-		console.log(ctxPosition,teste.position)
+		
+		plataformas.forEach(plataforma =>{
+			if(plataforma.colide(CANVAS,ctxPosition))
+				plataforma.draw(CTX,ctxPosition)
+		})
+
 		if (gameover) {
 			console.error('DEAD!!!')
 			cancelAnimationFrame(animeReqReference)
@@ -52,20 +46,22 @@ const  init = async ()=>{
 	ctxPosition = [0,CANVAS.height]
 	
 	boundaries = {
-		width: CANVAS.width,
-		height: CANVAS.height
+		width: 10000,
+		height: 1000
 	}
 
-	teste = new Personagem([100,100],[30,65],[8,15],FRAMES)
+	teste = new Personagem([100,100],[30,65],[8,15],FRAMES);
 
-	plataformas.push(new Plataforma([0,0],[10000,100]))
-	plataformas.push(new Plataforma([200,100],[100,100]))
+	plataformas.push(new Plataforma([0,0],[10000,48],"#f00","floor"))
+	plataformas.push(new Plataforma([200,48],[100,100]))
 	plataformas.push(new Plataforma([400,200],[100,100]))
 	plataformas.push(new Plataforma([550,300],[150,50]))
 	plataformas.push(new Plataforma([200,350],[150,50]))
 	//plataformas.push(new Plataforma([0,0],[10,CANVAS.height]))
 
 	keyPress(window)
+
+	await sleep(1000)
 	loop()
 }
 
