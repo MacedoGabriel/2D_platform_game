@@ -16,19 +16,18 @@ export default class Plataforma{
 
 	async loadsImgs() {
             
-		if(this.plataformType = "floor"){		
+		if(this.plataformType == "floor"){		
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile77.png"));
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile78.png"));
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile89.png"));
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile100.png"));
 		this.imgsTotal = 4;
-	}
-	if(this.plataformType = "floor"){		
-		this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile77.png"));
-		this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile78.png"));
-		this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile89.png"));
-		this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile100.png"));
-	this.imgsTotal = 4;
+		}
+		if(this.plataformType == "plataform"){		
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile18.png"));
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile19.png"));
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile20.png"));
+		this.imgsTotal = 3;
 }
 
 
@@ -44,8 +43,8 @@ export default class Plataforma{
 		ctx.lineWidth = 2;
 		ctx.strokeStyle = this.color;;
 		ctx.strokeRect(this.position[0] - canvasPosition[0], canvasPosition[1]-this.position[1]-this.size[1], this.size[0], this.size[1]);
-		if(this.plataformType){
-			var i = 0;
+		if(this.plataformType == "floor"){
+			var i = 0; 
 			var img = 0
 			while(i<this.size[0]){
 				this.image = this.imgs[img]
@@ -65,9 +64,34 @@ export default class Plataforma{
 			img++
 			if(img>=this.imgsTotal)
 				img = 0;
-			
-			}
-			
+			}	
+		}
+		if(this.plataformType == "plataform"){
+			var i = 0; 
+			var img = 0;
+			var nImgs = this.size[0]/48-1;
+			while(i<this.size[0]){
+				if(img==0)
+					this.image = this.imgs[2]
+				if(img>0)
+					this.image = this.imgs[1]
+				if(img==nImgs)
+					this.image = this.imgs[0]
+				ctx.drawImage(
+				this.image,                                                   
+				0,                        
+				0,							                               
+				48, 
+				48,
+				i+this.position[0] - canvasPosition[0],
+				canvasPosition[1]-this.position[1]-this.size[1]-32,
+				48,
+				48
+			);
+			//console.log(i,this.position[0], canvasPosition[0])
+			i +=48;
+			img++
+			}	
 		}
 	};  
 
@@ -80,15 +104,9 @@ export default class Plataforma{
 		if(this.position[1] < ctxPosition[1] && this.position[1] + this.size[1] > ctxPosition[1]-CTX.height){
 			colidio ++;
 		}
-		//p.color = "#f00"
-		if(colidio == 2){
-			//p.color = "#ff0"
-			//console.log(p.position)
-			
+		if(colidio == 2){	
 			return true;
 		}
-		console.log("fora da tela")
 		return false;
-
 	}
 }

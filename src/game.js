@@ -22,10 +22,15 @@ const loop = () => {
 		CTX.clearRect(0, 0, CANVAS.width, CANVAS.height)
 		teste.move(boundaries, keys,plataformas);	
 		teste.draw(CTX,ctxPosition);
-		ctxPosition[0] = + teste.position[0]-350
+		ctxPosition[0] = +teste.position[0]-350
+		ctxPosition[1] = CANVAS.height + teste.position[1]-200
 		if(ctxPosition[0] < 0)
 			ctxPosition[0] = 0
-		
+		if(ctxPosition[0] > 48*30-CANVAS.width)
+			ctxPosition[0] = 48*30-CANVAS.width
+		if(ctxPosition[1] < 600)
+			ctxPosition[1] = 600
+
 		plataformas.forEach(plataforma =>{
 			if(plataforma.colide(CANVAS,ctxPosition))
 				plataforma.draw(CTX,ctxPosition)
@@ -46,17 +51,18 @@ const  init = async ()=>{
 	ctxPosition = [0,CANVAS.height]
 	
 	boundaries = {
-		width: 10000,
+		width: 48*30,
 		height: 1000
 	}
 
 	teste = new Personagem([100,100],[30,65],[8,15],FRAMES);
 
-	plataformas.push(new Plataforma([0,0],[10000,48],"#f00","floor"))
-	plataformas.push(new Plataforma([200,48],[100,100]))
-	plataformas.push(new Plataforma([400,200],[100,100]))
-	plataformas.push(new Plataforma([550,300],[150,50]))
-	plataformas.push(new Plataforma([200,350],[150,50]))
+	plataformas.push(new Plataforma([0,0],[48*30,48],"#f00","floor"))
+	//plataformas.push(new Plataforma([200,48],[100,100]))
+	plataformas.push(new Plataforma([400,150],[48*3,16],"#f00","plataform"))
+	plataformas.push(new Plataforma([650,250],[48*5,16],"#f00","plataform"))
+	plataformas.push(new Plataforma([170,320],[48*5,16],"#f00","plataform"))
+	plataformas.push(new Plataforma([250,450],[48*2,16],"#f00","plataform"))
 	//plataformas.push(new Plataforma([0,0],[10,CANVAS.height]))
 
 	keyPress(window)
