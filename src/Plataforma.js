@@ -2,7 +2,7 @@ import { loadImage } from "./loaderAssets";
 
 export default class Plataforma{
 
-    constructor(position = [0,0], size= [0,0], color = "#f00", plataformType=null) {
+    constructor(position = [0,0], size= [0,0], plataformType=null, color = "#f00") {
 		this.position = position;
 		this.size = size;
         this.color = color;
@@ -28,21 +28,54 @@ export default class Plataforma{
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile19.png"));
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile20.png"));
 		this.imgsTotal = 3;
-}
+		}
+		if(this.plataformType == "leftWall"){		
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile124.png"));
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile122.png"));
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile112.png"));
+		this.imgsTotal = 3;
+		}
+		if(this.plataformType == "rigthWall"){		
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile116.png"));
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile120.png"));
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile84.png"));
+		this.imgsTotal = 3;
+		}
+		if(this.plataformType == "leftBlock"){
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile121.png"));		
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile83.png"));
+		this.imgsTotal = 2;
+		}
+		if(this.plataformType == "rigthBlock"){
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile118.png"));		
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile82.png"));
+		this.imgsTotal = 2;
+		}
+		if(this.plataformType == "bottonBlock"){
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile49.png"));
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile59.png"));		
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile61.png"));
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile34.png"));
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile58.png"));
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile56.png"));
 
-
-
-}
+		this.imgsTotal = 6;
+		}
+		if(this.plataformType == "block"){
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile121.png"));		
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile83.png"));
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile118.png"));
+			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile82.png"));
+		this.imgsTotal = 4;
+		}
+	}
 
     draw(ctx,canvasPosition) {
 	
-		//ctx.lineWidth = 5;
-		//ctx.fillStyle = this.color;
-		//ctx.fillRect(this.position[0] - canvasPosition[0], canvasPosition[1]-this.position[1]-this.size[1], this.size[0], this.size[1]);
-
-		ctx.lineWidth = 2;
-		ctx.strokeStyle = this.color;;
-		ctx.strokeRect(this.position[0] - canvasPosition[0], canvasPosition[1]-this.position[1]-this.size[1], this.size[0], this.size[1]);
+		//ctx.lineWidth = 2;
+		//ctx.strokeStyle = this.color;;
+		//ctx.strokeRect(this.position[0] - canvasPosition[0], canvasPosition[1]-this.position[1]-this.size[1], this.size[0], this.size[1]);
+		
 		if(this.plataformType == "floor"){
 			var i = 0; 
 			var img = 0
@@ -93,7 +126,94 @@ export default class Plataforma{
 			img++
 			}	
 		}
-	};  
+		if(this.plataformType == "leftWall" || this.plataformType == "rigthWall" || this.plataformType == "leftBlock" || this.plataformType == "rigthBlock"){
+			var i = 0; 
+			var img = 0
+			while(i<this.size[1]){
+				this.image = this.imgs[img]
+				ctx.drawImage(
+				this.image,                                                   
+				0,                        
+				0,							                               
+				48, 
+				48,
+				this.position[0] - canvasPosition[0],
+				i+canvasPosition[1]-this.position[1]-this.size[1],
+				48,
+				48
+			);
+			//console.log(i,this.position[0], canvasPosition[0])
+			i +=48;
+			img++
+			if(img>=this.imgsTotal)
+				img = 0;
+			}	
+		}
+		if(this.plataformType == "block"){
+			var i = 0;
+			var c = 0; 
+			var img = 0;
+			while(c<this.size[0]){
+				i=0;
+				while(i<this.size[1]){
+					this.image = this.imgs[img]
+					ctx.drawImage(
+					this.image,                                                   
+					0,                        
+					0,							                               
+					48, 
+					48,
+					c+this.position[0] - canvasPosition[0],
+					i+canvasPosition[1]-this.position[1]-this.size[1],
+					48,
+					48
+					);
+					i +=48;
+					
+					img++
+				}
+				c +=48;	
+			}
+		};
+		if(this.plataformType == "bottonBlock"){
+			var i = 0;
+			var c = 0; 
+			var nImgX = this.size[0]/48-1;
+			var nImgY = this.size[1]/48-1;
+		
+			while(c<this.size[0]/48){
+				i=0;
+				while(i<this.size[1]/48){
+					if(c==0 && i != 0)
+						this.image = this.imgs[4];
+					else if(c==0 && i == 0)
+						this.image = this.imgs[2];
+					else if(c!=0 && c!=nImgX && i == 0)
+						this.image = this.imgs[1];
+					else if(c == nImgX && i	 != 0)
+						this.image = this.imgs[5];					
+					else if(c == nImgX && i == 0)
+						this.image = this.imgs[0];
+					else
+						this.image = this.imgs[3];
+
+					ctx.drawImage(
+					this.image,                                                   
+					0,                        
+					0,							                               
+					48, 
+					48,
+					(c*48)+this.position[0] - canvasPosition[0],
+					(i*48)+canvasPosition[1]-this.position[1]-this.size[1],
+					48,
+					48
+					);
+					i ++;
+				}
+				c ++;	
+			}
+		};
+	}  
 
 	colide(CTX,ctxPosition){
 		

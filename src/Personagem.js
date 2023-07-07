@@ -45,29 +45,17 @@ export default class Personagem{
 	}
 
     draw(ctx,canvasPosition) {
-		//if(this.jumping)
-		//	this.color = "#0f0";
-		//else
-		//	this.color = "#00f";
+
 		ctx.save();
 		var xPosition = this.position[0] - canvasPosition[0]
 		if(this.direction == -1){
 			ctx.scale(-1,1);
 			xPosition = -(this.position[0]+this.size[0] - canvasPosition[0] )
 		}
-
 		
-		ctx.lineWidth = 2;
-		ctx.strokeStyle = "#000";
-		ctx.strokeRect(xPosition, canvasPosition[1]-this.position[1]-this.size[1], this.size[0], this.size[1]);
-
-		//ctx.fillStyle = this.color;
-		//ctx.fillRect(this.position[0], canvasPosition[1]-this.position[1]-this.size[1], this.size[0], this.size[1]);
-
-		
-		
-		//console.log(xPosition,this.position[0])
-		//console.log()
+		//ctx.lineWidth = 2;
+		//ctx.strokeStyle = "#000";
+		//ctx.strokeRect(xPosition, canvasPosition[1]-this.position[1]-this.size[1], this.size[0], this.size[1]);
 
 		if(this.image == this.Sprite["idle"])
 			ctx.drawImage(
@@ -97,16 +85,15 @@ export default class Personagem{
 		if(this.image == this.Sprite["run"]){
 			ctx.drawImage(
 				this.image,                                                   
-				(this.SpriteAtual * this.SpriteWidth) + 44,                        
+				(this.SpriteAtual * this.SpriteWidth) + 30,                        
 				0,							                               
-				this.SpriteWidth-20, 
+				this.SpriteWidth-10, 
 				this.SpriteHeight,
 				xPosition,
 				canvasPosition[1]-this.position[1]-this.size[1]*2 + 2,
 				(this.SpriteWidth*this.size[0])/30,
 				(this.SpriteHeight*this.size[1])/65
 			);
-			
 		}		
 		if(this.image == this.Sprite["jump"]){
 			if(this.speed[1] > 8)
@@ -138,11 +125,11 @@ export default class Personagem{
 		var xmov = false; 
 		keys.forEach(key => {                   
 			//if(!this.jumping){
-				if(key=='ArrowLeft'||key=='a'){
+				if(key=='ArrowLeft' || key=='a'){
 					this.speed[0] = this.speed[0] - this.aceleration[0] * (!this.jumping ? 1 : 0.1);
 					xmov = true;
 				}
-				else if(key=='ArrowRight'||key=='d'){
+				else if(key=='ArrowRight'|| key=='d'){
 					this.speed[0] = this.speed[0] + this.aceleration[0] * (!this.jumping ? 1 : 0.1);
 					xmov = true;
 				}
@@ -150,16 +137,13 @@ export default class Personagem{
 					xmov = false;
 				}
 			if(!this.jumping){
-				if(key=='ArrowUp'||key=='w'){
+				if(key=='ArrowUp' || key=='w'){
 					this.speed[1] = this.speed[1] + this.aceleration[1];
 					this.jumping=true;
 				}
 			}
 		});
 		
-
-		
-
 		if(!xmov && !this.jumping){
 			if(this.speed[0] > 0){
 				this.speed[0] = this.speed[0] - this.decelerate[0];
@@ -178,12 +162,11 @@ export default class Personagem{
 			if(this.speed[0] > this.MaxSpeed[0])
 				this.speed[0] = this.MaxSpeed[0];
 		}
-
 		if(this.speed[0] < 0){
 			if(this.speed[0] < (this.MaxSpeed[0]*-1))
 				this.speed[0] = this.MaxSpeed[0]*-1;
-
 		}
+
 		if(this.jumping){
 			this.speed[1] = this.speed[1] - this.decelerate[1];
 		}
@@ -191,14 +174,8 @@ export default class Personagem{
 		if(this.speed[1] < this.MaxSpeed[1]*-1)
 			this.speed[1] = this.MaxSpeed[1]*-1;
 
-
-		
-
  		var colidio = false;
-		
-		//console.log(this.position)
-		//console.log(this.speed)
-
+	
 		plataformas.forEach(p =>{	
 			if(this.colide(p)){
 				colidio = true;				
@@ -231,9 +208,7 @@ export default class Personagem{
 					//console.log("baixo")
 				}
 
-			}
-			
-			
+			}				
 		})
 		if(!colidio)
 			this.jumping = true
@@ -245,10 +220,8 @@ export default class Personagem{
 		//	this.position[1] = 100; 
 		//}
 		
+		//this.limits(limits);
 		
-		this.limits(limits);
-		
-
 		if(!this.jumping){
 			if(this.speed[0] == 0 && this.image != this.Sprite["idle"]){
 				this.image = this.Sprite["idle"];
@@ -299,15 +272,8 @@ export default class Personagem{
 		if(this.position[1] + this.speed[1] < p.position[1] + p.size[1] && this.position[1] + this.size[1]+this.speed[1] > p.position[1]){
 			colidio ++;
 		}
-		//p.color = "#f00"
 		if(colidio == 2){
-			//p.color = "#ff0"
-			//console.log(p.position)
-			
 			return true;
 		}
-		return false
-		console.log("fora da tela")
-
 	}
 }
