@@ -14,6 +14,24 @@ let boundaries;
 let ctxPosition = [0,0];
 let plataformas = [];
 
+
+const  init = async ()=>{
+	console.log("Initialize Canvas")
+	CANVAS = document.querySelector('canvas')
+	CTX = CANVAS.getContext('2d')
+	ctxPosition = [0,CANVAS.height]
+	boundaries = {
+		width: 48*30,
+		height: 1000
+	}
+
+	loadLevel().then(()=>{loop()})
+	keyPress(window)
+
+	
+}
+
+
 const loop = () => {
 	setTimeout(() => {
 		CTX.clearRect(0, 0, CANVAS.width, CANVAS.height)
@@ -44,23 +62,9 @@ const loop = () => {
 	}, 1000 / FRAMES)
 }
 
-const  init = async ()=>{
-	console.log("Initialize Canvas")
-	CANVAS = document.querySelector('canvas')
-	CTX = CANVAS.getContext('2d')
-	ctxPosition = [0,CANVAS.height]
-	boundaries = {
-		width: 48*30,
-		height: 1000
-	}
-	await loadLevel();
-	keyPress(window)
-	loop()
-}
-
-const  loadLevel = async ()=>{
+const loadLevel = async ()=>{
 	
-	personagem = new Personagem([100,50],[30,65],[8,15],FRAMES);
+	personagem =  new Personagem([100,50],[30,65],[8,15],FRAMES)
 
 	plataformas.push(new Plataforma([0,0],[48,48*30],"leftWall"))
 	plataformas.push(new Plataforma([48*29,0],[48,48*30],"rigthWall"))
@@ -78,6 +82,14 @@ const  loadLevel = async ()=>{
 	plataformas.push(new Plataforma([600,830],[48*2,16],"plataform"))
 	plataformas.push(new Plataforma([200,850],[48*2,16],"plataform"))
 	plataformas.push(new Plataforma([48,900],[48,48*2],"rigthBlock"))
+	
+	try {
+		await Promise.all(plataformas.map(async e => e.isLoaded()))
+		await personagem.isLoaded()
+	} catch (error){
+		console.error(`Erro ao carregar assets!`)
+	}
+	
 }
 
 export { init, loop }

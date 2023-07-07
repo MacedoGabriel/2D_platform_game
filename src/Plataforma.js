@@ -7,15 +7,30 @@ export default class Plataforma{
 		this.size = size;
         this.color = color;
 		this.plataformType = plataformType;
+		this.IS_LOADING = false
 		this.image = new Image();
 		this.imgs = []
 		if(this.plataformType){
-			this.loadsImgs().then(()=>(this.image = this.imgs[1]))
+			this.loadsImgs()
 		}
 	}
 
-	async loadsImgs() {
-            
+	isLoaded(){
+		return new Promise((resolve,reject)=>{
+			const interval = setInterval(()=>{
+				console.log('Interval: ',this.IS_LOADING)
+				if(!this.IS_LOADING){
+					clearInterval(interval)
+					console.log('Interval OFF: ',this.IS_LOADING)
+					resolve(true)
+				}
+			},1000)
+			setTimeout(()=>{reject(false)},60000)
+		})
+	}
+
+
+	async loadsImgs() {        
 		if(this.plataformType == "floor"){		
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile77.png"));
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile78.png"));
@@ -23,35 +38,35 @@ export default class Plataforma{
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile100.png"));
 		this.imgsTotal = 4;
 		}
-		if(this.plataformType == "plataform"){		
+		else if(this.plataformType == "plataform"){		
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile18.png"));
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile19.png"));
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile20.png"));
 		this.imgsTotal = 3;
 		}
-		if(this.plataformType == "leftWall"){		
+		else if(this.plataformType == "leftWall"){		
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile124.png"));
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile122.png"));
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile112.png"));
 		this.imgsTotal = 3;
 		}
-		if(this.plataformType == "rigthWall"){		
+		else if(this.plataformType == "rigthWall"){		
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile116.png"));
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile120.png"));
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile84.png"));
 		this.imgsTotal = 3;
 		}
-		if(this.plataformType == "leftBlock"){
+		else if(this.plataformType == "leftBlock"){
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile121.png"));		
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile83.png"));
 		this.imgsTotal = 2;
 		}
-		if(this.plataformType == "rigthBlock"){
+		else if(this.plataformType == "rigthBlock"){
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile118.png"));		
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile82.png"));
 		this.imgsTotal = 2;
 		}
-		if(this.plataformType == "bottonBlock"){
+		else if(this.plataformType == "bottonBlock"){
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile49.png"));
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile59.png"));		
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile61.png"));
@@ -61,7 +76,7 @@ export default class Plataforma{
 
 		this.imgsTotal = 6;
 		}
-		if(this.plataformType == "block"){
+		else if(this.plataformType == "block"){
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile121.png"));		
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile83.png"));
 			this.imgs.push(await loadImage("/ASSETS/img/Tiles/tile118.png"));

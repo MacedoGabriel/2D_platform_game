@@ -1,4 +1,4 @@
-import './styles/style.css'
+//import './styles/style.css'
 import {init} from "./game.js"
 
-window.addEventListener("load", init, false)
+window.addEventListener("load", init, false);
