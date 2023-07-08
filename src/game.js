@@ -13,6 +13,11 @@ const gravidadede = 4;
 let boundaries;
 let ctxPosition = [0,0];
 let plataformas = [];
+let score = 0
+let maxScore = 0
+let vidas = -1 // numeros de vida (-1 = infinitas)
+let safeZone = 200
+let vulneravel = false
 
 
 const  init = async ()=>{
@@ -27,8 +32,6 @@ const  init = async ()=>{
 
 	loadLevel().then(()=>{loop()})
 	keyPress(window)
-
-	
 }
 
 
@@ -54,6 +57,30 @@ const loop = () => {
 				plataforma.draw(CTX,ctxPosition)
 		})
 
+
+
+		if(!personagem.jumping)
+			score = personagem.position[1]-48
+		if(score > 900)
+			score = 900
+		if(score>maxScore)
+			maxScore = score
+		if(vidas>=0){
+			if(personagem.position[1]-48 > safeZone){
+				vulneravel = true
+			}
+			else if(!personagem.jumping && personagem.position[1]-48 != 0)
+				vulneravel = false
+			if(vulneravel && personagem.position[1]-48 == 0){
+				vulneravel = false
+				vidas --
+			}
+			if(vidas == 0)
+				gameover = true
+		}
+		progressBar(CTX)
+		//console.log(vulneravel,vidas)
+
 		if (gameover) {
 			console.error('DEAD!!!')
 			cancelAnimationFrame(animeReqReference)
@@ -62,9 +89,25 @@ const loop = () => {
 	}, 1000 / FRAMES)
 }
 
+function progressBar(ctx){
+	
+	ctx.save()
+	ctx.globalAlpha= 1
+	ctx.lineWidth = 5;
+	ctx.fillStyle = "#50ff50";
+	ctx.fillRect(20, 350-(maxScore*100)/900, 20, (maxScore*100)/900);
+	ctx.fillStyle = "#ffff00";
+	ctx.fillRect(20, 350-(score*100)/900, 20, (score*100)/900);
+	
+	ctx.lineWidth = 2;
+	ctx.strokeStyle = "#000";
+	ctx.strokeRect(20, 250, 20, 100);
+	ctx.restore()
+}
+
 const loadLevel = async ()=>{
 	
-	personagem =  new Personagem([100,50],[30,65],[8,15],FRAMES)
+	personagem =  new Personagem([100,48],[30,65],[8,15],FRAMES)
 
 	plataformas.push(new Plataforma([0,0],[48,48*30],"leftWall"))
 	plataformas.push(new Plataforma([48*29,0],[48,48*30],"rigthWall"))

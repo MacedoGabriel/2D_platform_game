@@ -7,11 +7,11 @@ export default class Plataforma{
 		this.size = size;
         this.color = color;
 		this.plataformType = plataformType;
-		this.IS_LOADING = false
+		this.IS_LOADING = true;
 		this.image = new Image();
 		this.imgs = []
 		if(this.plataformType){
-			this.loadsImgs()
+			this.loadsImgs().then(()=>{this.IS_LOADING=false});
 		}
 	}
 

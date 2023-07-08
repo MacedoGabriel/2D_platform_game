@@ -13,7 +13,7 @@ export default class Personagem{
 		this.jumping = false;
 		this.decelerate = [2,0.5];
 		this.direction = 1;
-		this.IS_LOADING = false
+		this.IS_LOADING = true;
 
 		this.SpriteWidth = 128;
         this.SpriteHeight = 128;
@@ -23,8 +23,8 @@ export default class Personagem{
 		this.SpriteSpeed = 0.5;
 
 		this.image = new Image();
-		this.pronto=false;
-		this.loadsprites().then(() => {this.image = this.Sprite["idle"]});
+		this.loadsprites().then(() => {this.image = this.Sprite["idle"]
+									   this.IS_LOADING=false});
 		this.animeSprite(frames);
 		
 	}
@@ -51,10 +51,10 @@ export default class Personagem{
 
 	async loadsprites() {
 			this.Sprite = {
-                idle: await loadImage("/ASSETS/img/sprite/idle.png"),
-				run: await loadImage("/ASSETS/img/sprite/run.png"),
-				jump: await loadImage("/ASSETS/img/sprite/jump.png"),
-				walk: await loadImage("/ASSETS/img/sprite/walk.png"),
+                idle: await loadImage("/ASSETS/img/sprite/Idle.png"),
+				run: await loadImage("/ASSETS/img/sprite/Run.png"),
+				jump: await loadImage("/ASSETS/img/sprite/Jump.png"),
+				walk: await loadImage("/ASSETS/img/sprite/Walk.png"),
             };
 	}
 
