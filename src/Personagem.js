@@ -3,7 +3,7 @@ import { loadImage } from "./loaderAssets";
 
 export default class Personagem{
 
-    constructor(position = {x:0,y:0}, size=  {x:0,y:0}, MaxSpeed =  {x:5,y:5}, frames, color = "#00f") {
+    constructor(position = {x:0,y:0}, size=  {x:0,y:0}, frames, MaxSpeed = {x:8,y:15}, color = "#00f") {
 		this.position = position;
 		this.size = size;
 		this.MaxSpeed = MaxSpeed;
@@ -23,7 +23,7 @@ export default class Personagem{
 		this.SpriteSpeed = 0.5;
 
 		this.image = new Image();
-		this.loadsprites().then(() => {this.image = this.Sprite["idle"]
+		this.loadsprites().then(() => {this.image = this.Sprite["Idle"]
 									   this.IS_LOADING=false});
 		this.animeSprite(frames);
 		
@@ -51,10 +51,10 @@ export default class Personagem{
 
 	async loadsprites() {
 			this.Sprite = {
-                idle: await loadImage("/ASSETS/img/sprite/Idle.png"),
-				run: await loadImage("/ASSETS/img/sprite/Run.png"),
-				jump: await loadImage("/ASSETS/img/sprite/Jump.png"),
-				walk: await loadImage("/ASSETS/img/sprite/Walk.png"),
+                Idle: await loadImage("/ASSETS/img/sprite/Idle.png"),
+				Run: await loadImage("/ASSETS/img/sprite/Run.png"),
+				Jump: await loadImage("/ASSETS/img/sprite/Jump.png"),
+				Walk: await loadImage("/ASSETS/img/sprite/Walk.png"),
             };
 	}
 
@@ -71,7 +71,7 @@ export default class Personagem{
 		//ctx.strokeStyle = "#000";
 		//ctx.strokeRect(xPosition, canvasPosition.y-this.position.y-this.size.y, this.size.x, this.size.y);
 
-		if(this.image == this.Sprite["idle"])
+		if(this.image == this.Sprite["Idle"])
 			ctx.drawImage(
 				this.image,                                                   
 				(this.SpriteAtual * this.SpriteWidth) + 36,                        
@@ -84,7 +84,7 @@ export default class Personagem{
 				(this.SpriteWidth*this.size.x)/30,
 				(this.SpriteHeight*this.size.y)/65
 			);
-		if(this.image == this.Sprite["walk"])
+		if(this.image == this.Sprite["Walk"])
 			ctx.drawImage(
 				this.image,                                                   
 				(this.SpriteAtual * this.SpriteWidth) + 40,                        
@@ -96,7 +96,7 @@ export default class Personagem{
 				(this.SpriteWidth*this.size.x)/30,
 				(this.SpriteHeight*this.size.y)/65
 			);
-		if(this.image == this.Sprite["run"]){
+		if(this.image == this.Sprite["Run"]){
 			ctx.drawImage(
 				this.image,                                                   
 				(this.SpriteAtual * this.SpriteWidth) + 30,                        
@@ -109,7 +109,7 @@ export default class Personagem{
 				(this.SpriteHeight*this.size.y)/65
 			);
 		}		
-		if(this.image == this.Sprite["jump"]){
+		if(this.image == this.Sprite["Jump"]){
 			if(this.speed.y > 8)
 				this.SpriteAtual = 2;
 			if(this.speed.y > 2 && this.speed.y < 8)
@@ -237,23 +237,23 @@ export default class Personagem{
 		//this.limits(limits);
 		
 		if(!this.jumping){
-			if(this.speed.x == 0 && this.image != this.Sprite["idle"]){
-				this.image = this.Sprite["idle"];
+			if(this.speed.x == 0 && this.image != this.Sprite["Idle"]){
+				this.image = this.Sprite["Idle"];
 				this.SpriteAtual = 0;
 				this.SpritesTotal = 7;
 			}
-			if(this.speed.x != 0 && Math.abs(this.speed.x) != this.MaxSpeed.x && this.image != this.Sprite["walk"] ){
-				this.image = this.Sprite["walk"];
+			if(this.speed.x != 0 && Math.abs(this.speed.x) != this.MaxSpeed.x && this.image != this.Sprite["Walk"] ){
+				this.image = this.Sprite["Walk"];
 				this.SpriteAtual = 0;
 				this.SpritesTotal = 7;
 			}
-			if(Math.abs(this.speed.x) == this.MaxSpeed.x && this.image != this.Sprite["run"]){
-				this.image = this.Sprite["run"];
+			if(Math.abs(this.speed.x) == this.MaxSpeed.x && this.image != this.Sprite["Run"]){
+				this.image = this.Sprite["Run"];
 				this.SpriteAtual = 0;
 				this.SpritesTotal = 8;
 			}}
-		if(this.speed.y != 0 && this.image != this.Sprite["jump"]){
-			this.image = this.Sprite["jump"];
+		if(this.speed.y != 0 && this.image != this.Sprite["Jump"]){
+			this.image = this.Sprite["Jump"];
 			this.SpriteAtual = 2;
 			this.SpritesTotal = 8;
 		}

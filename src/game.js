@@ -32,7 +32,12 @@ const  init = async ()=>{
 		height: 1000
 	}
 
-	loadLevel().then(()=>{loop()})
+	fetch('/level.json')
+    .then((response) => response.json())
+	.then((json) => loadLevel(json))
+	.then(()=>{loop()});
+
+	//loadLevel().then(()=>{loop()})
 	keyPress(window)
 }
 
@@ -109,26 +114,14 @@ function progressBar(ctx){
 	ctx.restore()
 }
 
-const loadLevel = async ()=>{
+const loadLevel = async (json)=>{
 	
-	personagem =  new Personagem({x:100,y:48},{x:30,y:65},{x:8,y:15},FRAMES)
+	console.log(json.Level)
+	personagem =  new Personagem(json.Level.Personagem[0],json.Level.Personagem[1],FRAMES)
 
-	plataformas.push(new Plataforma({x: 0,y: 0},{x: 48,y: 48*30},"leftWall"))
-	plataformas.push(new Plataforma({x: 48*29,y: 0},{x: 48,y: 48*30},"rigthWall"))
-	plataformas.push(new Plataforma({x: 0,y: 0},{x: 48*30,y: 48},"floor"))
-	
-	plataformas.push(new Plataforma({x: 400,y: 150},{x: 48*3,y: 16},"plataform"))
-	plataformas.push(new Plataforma({x: 650,y: 250},{x: 48*5,y: 16},"plataform"))
-	plataformas.push(new Plataforma({x: 170,y: 320},{x: 48*5,y: 16},"plataform"))
-	plataformas.push(new Plataforma({x: 250,y: 450},{x: 48*2,y: 16},"plataform"))
-	plataformas.push(new Plataforma({x: 690,y: 470},{x: 48*2,y: 16},"plataform"))
-	plataformas.push(new Plataforma({x: 1100,y: 470},{x: 48*2,y: 16},"plataform"))
-	plataformas.push(new Plataforma({x: 48*28,y: 500},{x: 48,y: 48*2},"leftBlock"))
-	plataformas.push(new Plataforma({x: 1100,y: 48},{x: 48*4,y: 48*2},"bottonBlock"))
-	plataformas.push(new Plataforma({x: 930,y: 710},{x: 48*4,y: 16},"plataform"))
-	plataformas.push(new Plataforma({x: 600,y: 830},{x: 48*2,y: 16},"plataform"))
-	plataformas.push(new Plataforma({x: 200,y: 850},{x: 48*2,y: 16},"plataform"))
-	plataformas.push(new Plataforma({x: 48,y: 900},{x: 48,y: 48*2},"rigthBlock"))
+	json.Level.Plataformas.forEach(p=>{
+		plataformas.push(new Plataforma(p[0],p[1],p[2]))
+	})
 	
 	try {
 		await Promise.all(plataformas.map(async e => e.isLoaded()))
