@@ -2,7 +2,7 @@ import { loadImage } from "./loaderAssets";
 
 export default class Plataforma{
 
-    constructor(position = [0,0], size= [0,0], plataformType=null, color = "#f00") {
+    constructor(position = {x:0,y:0}, size= {x:0,y:0}, plataformType=null, color = "#f00") {
 		this.position = position;
 		this.size = size;
         this.color = color;
@@ -89,12 +89,12 @@ export default class Plataforma{
 	
 		//ctx.lineWidth = 2;
 		//ctx.strokeStyle = this.color;;
-		//ctx.strokeRect(this.position[0] - canvasPosition[0], canvasPosition[1]-this.position[1]-this.size[1], this.size[0], this.size[1]);
+		//ctx.strokeRect(this.position.x - canvasPosition.x, canvasPosition.y-this.position.y-this.size.y, this.size.x, this.size.y);
 		
 		if(this.plataformType == "floor"){
 			var i = 0; 
 			var img = 0
-			while(i<this.size[0]){
+			while(i<this.size.x){
 				this.image = this.imgs[img]
 				ctx.drawImage(
 				this.image,                                                   
@@ -102,12 +102,12 @@ export default class Plataforma{
 				0,							                               
 				48, 
 				48,
-				i+this.position[0] - canvasPosition[0],
-				canvasPosition[1]-this.position[1]-this.size[1],
+				i+this.position.x - canvasPosition.x,
+				canvasPosition.y-this.position.y-this.size.y,
 				48,
 				48
 			);
-			//console.log(i,this.position[0], canvasPosition[0])
+			//console.log(i,this.position.x, canvasPosition.x)
 			i +=48;
 			img++
 			if(img>=this.imgsTotal)
@@ -117,8 +117,8 @@ export default class Plataforma{
 		if(this.plataformType == "plataform"){
 			var i = 0; 
 			var img = 0;
-			var nImgs = this.size[0]/48-1;
-			while(i<this.size[0]){
+			var nImgs = this.size.x/48-1;
+			while(i<this.size.x){
 				if(img==0)
 					this.image = this.imgs[2]
 				if(img>0)
@@ -131,12 +131,12 @@ export default class Plataforma{
 				0,							                               
 				48, 
 				48,
-				i+this.position[0] - canvasPosition[0],
-				canvasPosition[1]-this.position[1]-this.size[1]-32,
+				i+this.position.x - canvasPosition.x,
+				canvasPosition.y-this.position.y-this.size.y-32,
 				48,
 				48
 			);
-			//console.log(i,this.position[0], canvasPosition[0])
+			//console.log(i,this.position.x, canvasPosition.x)
 			i +=48;
 			img++
 			}	
@@ -144,7 +144,7 @@ export default class Plataforma{
 		if(this.plataformType == "leftWall" || this.plataformType == "rigthWall" || this.plataformType == "leftBlock" || this.plataformType == "rigthBlock"){
 			var i = 0; 
 			var img = 0
-			while(i<this.size[1]){
+			while(i<this.size.y){
 				this.image = this.imgs[img]
 				ctx.drawImage(
 				this.image,                                                   
@@ -152,12 +152,12 @@ export default class Plataforma{
 				0,							                               
 				48, 
 				48,
-				this.position[0] - canvasPosition[0],
-				i+canvasPosition[1]-this.position[1]-this.size[1],
+				this.position.x - canvasPosition.x,
+				i+canvasPosition.y-this.position.y-this.size.y,
 				48,
 				48
 			);
-			//console.log(i,this.position[0], canvasPosition[0])
+			//console.log(i,this.position.x, canvasPosition.x)
 			i +=48;
 			img++
 			if(img>=this.imgsTotal)
@@ -168,9 +168,9 @@ export default class Plataforma{
 			var i = 0;
 			var c = 0; 
 			var img = 0;
-			while(c<this.size[0]){
+			while(c<this.size.x){
 				i=0;
-				while(i<this.size[1]){
+				while(i<this.size.y){
 					this.image = this.imgs[img]
 					ctx.drawImage(
 					this.image,                                                   
@@ -178,8 +178,8 @@ export default class Plataforma{
 					0,							                               
 					48, 
 					48,
-					c+this.position[0] - canvasPosition[0],
-					i+canvasPosition[1]-this.position[1]-this.size[1],
+					c+this.position.x - canvasPosition.x,
+					i+canvasPosition.y-this.position.y-this.size.y,
 					48,
 					48
 					);
@@ -193,12 +193,12 @@ export default class Plataforma{
 		if(this.plataformType == "bottonBlock"){
 			var i = 0;
 			var c = 0; 
-			var nImgX = this.size[0]/48-1;
-			var nImgY = this.size[1]/48-1;
+			var nImgX = this.size.x/48-1;
+			var nImgY = this.size.y/48-1;
 		
-			while(c<this.size[0]/48){
+			while(c<this.size.x/48){
 				i=0;
-				while(i<this.size[1]/48){
+				while(i<this.size.y/48){
 					if(c==0 && i != 0)
 						this.image = this.imgs[4];
 					else if(c==0 && i == 0)
@@ -218,8 +218,8 @@ export default class Plataforma{
 					0,							                               
 					48, 
 					48,
-					(c*48)+this.position[0] - canvasPosition[0],
-					(i*48)+canvasPosition[1]-this.position[1]-this.size[1],
+					(c*48)+this.position.x - canvasPosition.x,
+					(i*48)+canvasPosition.y-this.position.y-this.size.y,
 					48,
 					48
 					);
@@ -230,13 +230,13 @@ export default class Plataforma{
 		};
 	}  
 
-	colide(CTX,ctxPosition){
+	colide(CTX,canvasPosition){
 		
 		var colidio = 0;
-		if(this.position[0] + this.size[0] > ctxPosition[0] && this.position[0] < ctxPosition[0] + CTX.width){
+		if(this.position.x + this.size.x > canvasPosition.x && this.position.x < canvasPosition.x + CTX.width){
 			colidio ++;
 		}
-		if(this.position[1] < ctxPosition[1] && this.position[1] + this.size[1] > ctxPosition[1]-CTX.height){
+		if(this.position.y < canvasPosition.y && this.position.y + this.size.y > canvasPosition.y-CTX.height){
 			colidio ++;
 		}
 		if(colidio == 2){	

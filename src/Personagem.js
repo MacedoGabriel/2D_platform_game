@@ -3,15 +3,15 @@ import { loadImage } from "./loaderAssets";
 
 export default class Personagem{
 
-    constructor(position = [0,0], size= [0,0], MaxSpeed = [5,5], frames, color = "#00f") {
+    constructor(position = {x:0,y:0}, size=  {x:0,y:0}, MaxSpeed =  {x:5,y:5}, frames, color = "#00f") {
 		this.position = position;
 		this.size = size;
 		this.MaxSpeed = MaxSpeed;
-		this.speed = [0,0];
+		this.speed = {x:0,y:0};
         this.color = color;
-		this.aceleration = [0.8,12];
+		this.aceleration =  {x:0.8,y:12};
 		this.jumping = false;
-		this.decelerate = [2,0.5];
+		this.decelerate = {x:2,y:0.5};
 		this.direction = 1;
 		this.IS_LOADING = true;
 
@@ -61,15 +61,15 @@ export default class Personagem{
     draw(ctx,canvasPosition) {
 
 		ctx.save();
-		var xPosition = this.position[0] - canvasPosition[0]
+		var xPosition = this.position.x - canvasPosition.x
 		if(this.direction == -1){
 			ctx.scale(-1,1);
-			xPosition = -(this.position[0]+this.size[0] - canvasPosition[0] )
+			xPosition = -(this.position.x+this.size.x - canvasPosition.x )
 		}
 		
 		//ctx.lineWidth = 2;
 		//ctx.strokeStyle = "#000";
-		//ctx.strokeRect(xPosition, canvasPosition[1]-this.position[1]-this.size[1], this.size[0], this.size[1]);
+		//ctx.strokeRect(xPosition, canvasPosition.y-this.position.y-this.size.y, this.size.x, this.size.y);
 
 		if(this.image == this.Sprite["idle"])
 			ctx.drawImage(
@@ -79,10 +79,10 @@ export default class Personagem{
 				this.SpriteWidth-2, 
 				this.SpriteHeight,
 				xPosition,
-				canvasPosition[1]-this.position[1]-this.size[1]*2 + 2,
+				canvasPosition.y-this.position.y-this.size.y*2 + 2,
 				
-				(this.SpriteWidth*this.size[0])/30,
-				(this.SpriteHeight*this.size[1])/65
+				(this.SpriteWidth*this.size.x)/30,
+				(this.SpriteHeight*this.size.y)/65
 			);
 		if(this.image == this.Sprite["walk"])
 			ctx.drawImage(
@@ -92,9 +92,9 @@ export default class Personagem{
 				this.SpriteWidth, 
 				this.SpriteHeight,
 				xPosition,
-				canvasPosition[1]-this.position[1]-this.size[1]*2 + 2,
-				(this.SpriteWidth*this.size[0])/30,
-				(this.SpriteHeight*this.size[1])/65
+				canvasPosition.y-this.position.y-this.size.y*2 + 2,
+				(this.SpriteWidth*this.size.x)/30,
+				(this.SpriteHeight*this.size.y)/65
 			);
 		if(this.image == this.Sprite["run"]){
 			ctx.drawImage(
@@ -104,21 +104,21 @@ export default class Personagem{
 				this.SpriteWidth-10, 
 				this.SpriteHeight,
 				xPosition,
-				canvasPosition[1]-this.position[1]-this.size[1]*2 + 2,
-				(this.SpriteWidth*this.size[0])/30,
-				(this.SpriteHeight*this.size[1])/65
+				canvasPosition.y-this.position.y-this.size.y*2 + 2,
+				(this.SpriteWidth*this.size.x)/30,
+				(this.SpriteHeight*this.size.y)/65
 			);
 		}		
 		if(this.image == this.Sprite["jump"]){
-			if(this.speed[1] > 8)
+			if(this.speed.y > 8)
 				this.SpriteAtual = 2;
-			if(this.speed[1] > 2 && this.speed[1] < 8)
+			if(this.speed.y > 2 && this.speed.y < 8)
 				this.SpriteAtual = 3;
-			if(this.speed[1] > -2 && this.speed[1] < 2)
+			if(this.speed.y > -2 && this.speed.y < 2)
 				this.SpriteAtual = 4;
-			if(this.speed[1] > -8 && this.speed[1] < -2)
+			if(this.speed.y > -8 && this.speed.y < -2)
 				this.SpriteAtual = 5;
-			if( this.speed[1] < -8)
+			if( this.speed.y < -8)
 				this.SpriteAtual = 6;
 			ctx.drawImage(
 				this.image,                                                   
@@ -127,9 +127,9 @@ export default class Personagem{
 				this.SpriteWidth, 
 				this.SpriteHeight,
 				xPosition,
-				canvasPosition[1]-this.position[1]-this.size[1]*2 + 5,
-				(this.SpriteWidth*this.size[0])/30,
-				(this.SpriteHeight*this.size[1])/65
+				canvasPosition.y-this.position.y-this.size.y*2 + 5,
+				(this.SpriteWidth*this.size.x)/30,
+				(this.SpriteHeight*this.size.y)/65
 			);
 		}
 		ctx.restore();
@@ -140,11 +140,11 @@ export default class Personagem{
 		keys.forEach(key => {                   
 			//if(!this.jumping){
 				if(key=='ArrowLeft' || key=='a'){
-					this.speed[0] = this.speed[0] - this.aceleration[0] * (!this.jumping ? 1 : 0.1);
+					this.speed.x = this.speed.x - this.aceleration.x * (!this.jumping ? 1 : 0.1);
 					xmov = true;
 				}
 				else if(key=='ArrowRight'|| key=='d'){
-					this.speed[0] = this.speed[0] + this.aceleration[0] * (!this.jumping ? 1 : 0.1);
+					this.speed.x = this.speed.x + this.aceleration.x * (!this.jumping ? 1 : 0.1);
 					xmov = true;
 				}
 				else{
@@ -152,41 +152,41 @@ export default class Personagem{
 				}
 			if(!this.jumping){
 				if(key=='ArrowUp' || key=='w'){
-					this.speed[1] = this.speed[1] + this.aceleration[1];
+					this.speed.y = this.speed.y + this.aceleration.y;
 					this.jumping=true;
 				}
 			}
 		});
 		
 		if(!xmov && !this.jumping){
-			if(this.speed[0] > 0){
-				this.speed[0] = this.speed[0] - this.decelerate[0];
-				if(this.speed[0] < 0)
-					this.speed[0]=0
+			if(this.speed.x > 0){
+				this.speed.x = this.speed.x - this.decelerate.x;
+				if(this.speed.x < 0)
+					this.speed.x=0
 			}
 	
-			if(this.speed[0] < 0){
-					this.speed[0] = this.speed[0] + this.decelerate[0];
-					if(this.speed[0] > 0)
-						this.speed[0]=0
+			if(this.speed.x < 0){
+					this.speed.x = this.speed.x + this.decelerate.x;
+					if(this.speed.x > 0)
+						this.speed.x=0
 			}
 		}
 
-		if(this.speed[0] > 0){
-			if(this.speed[0] > this.MaxSpeed[0])
-				this.speed[0] = this.MaxSpeed[0];
+		if(this.speed.x > 0){
+			if(this.speed.x > this.MaxSpeed.x)
+				this.speed.x = this.MaxSpeed.x;
 		}
-		if(this.speed[0] < 0){
-			if(this.speed[0] < (this.MaxSpeed[0]*-1))
-				this.speed[0] = this.MaxSpeed[0]*-1;
+		if(this.speed.x < 0){
+			if(this.speed.x < (this.MaxSpeed.x*-1))
+				this.speed.x = this.MaxSpeed.x*-1;
 		}
 
 		if(this.jumping){
-			this.speed[1] = this.speed[1] - this.decelerate[1];
+			this.speed.y = this.speed.y - this.decelerate.y;
 		}
 		
-		if(this.speed[1] < this.MaxSpeed[1]*-1)
-			this.speed[1] = this.MaxSpeed[1]*-1;
+		if(this.speed.y < this.MaxSpeed.y*-1)
+			this.speed.y = this.MaxSpeed.y*-1;
 
  		var colidio = false;
 	
@@ -194,31 +194,31 @@ export default class Personagem{
 			if(this.colide(p)){
 				colidio = true;				
 				
-				if((this.position[0] + this.size[0] <= p.position[0])){
+				if((this.position.x + this.size.x <= p.position.x)){
 					if(this.jumping)
-						this.speed[0] = this.speed[0]*0;
+						this.speed.x = this.speed.x*0;
 					else
-						this.speed[0] = 0
-					this.position[0] = p.position[0] - this.size[0]
+						this.speed.x = 0
+					this.position.x = p.position.x - this.size.x
 					//console.log("direita")
 				}
-				else if((this.position[0] >= p.position[0] + p.size[0])){
+				else if((this.position.x >= p.position.x + p.size.x)){
 					if(this.jumping)
-						this.speed[0] = this.speed[0]*0;
+						this.speed.x = this.speed.x*0;
 					else
-						this.speed[0] = 0
-					this.position[0] = p.position[0] + p.size[0]
+						this.speed.x = 0
+					this.position.x = p.position.x + p.size.x
 					//console.log("esquerda")
 				}
-				else if(this.position[1] + this.size[1] <= p.position[1]){
-					this.speed[1] = 0
-					this.position[1] = p.position[1] - this.size[1]
+				else if(this.position.y + this.size.y <= p.position.y){
+					this.speed.y = 0
+					this.position.y = p.position.y - this.size.y
 					//console.log("cima")
 				}
-				else if(this.position[1] >= p.position[1] + p.size[1]){
+				else if(this.position.y >= p.position.y + p.size.y){
 					this.jumping = false;
-					this.speed[1] = 0
-					this.position[1] = p.position[1] +p.size[1]
+					this.speed.y = 0
+					this.position.y = p.position.y +p.size.y
 					//console.log("baixo")
 				}
 
@@ -226,64 +226,64 @@ export default class Personagem{
 		})
 		if(!colidio)
 			this.jumping = true
-		this.position[0] = this.position[0] + this.speed[0];
-		this.position[1] = this.position[1] + this.speed[1];
-		//if(this.position[1] < 100){
+		this.position.x = this.position.x + this.speed.x;
+		this.position.y = this.position.y + this.speed.y;
+		//if(this.position.y < 100){
 		//	this.jumping = false;
-		//	this.speed[1] = 0;
-		//	this.position[1] = 100; 
+		//	this.speed.y = 0;
+		//	this.position.y = 100; 
 		//}
 		
 		//this.limits(limits);
 		
 		if(!this.jumping){
-			if(this.speed[0] == 0 && this.image != this.Sprite["idle"]){
+			if(this.speed.x == 0 && this.image != this.Sprite["idle"]){
 				this.image = this.Sprite["idle"];
 				this.SpriteAtual = 0;
 				this.SpritesTotal = 7;
 			}
-			if(this.speed[0] != 0 && Math.abs(this.speed[0]) != this.MaxSpeed[0] && this.image != this.Sprite["walk"] ){
+			if(this.speed.x != 0 && Math.abs(this.speed.x) != this.MaxSpeed.x && this.image != this.Sprite["walk"] ){
 				this.image = this.Sprite["walk"];
 				this.SpriteAtual = 0;
 				this.SpritesTotal = 7;
 			}
-			if(Math.abs(this.speed[0]) == this.MaxSpeed[0] && this.image != this.Sprite["run"]){
+			if(Math.abs(this.speed.x) == this.MaxSpeed.x && this.image != this.Sprite["run"]){
 				this.image = this.Sprite["run"];
 				this.SpriteAtual = 0;
 				this.SpritesTotal = 8;
 			}}
-		if(this.speed[1] != 0 && this.image != this.Sprite["jump"]){
+		if(this.speed.y != 0 && this.image != this.Sprite["jump"]){
 			this.image = this.Sprite["jump"];
 			this.SpriteAtual = 2;
 			this.SpritesTotal = 8;
 		}
 
-		if(this.speed[0] > 0)
+		if(this.speed.x > 0)
 			this.direction = 1;
-		if(this.speed[0] < 0)
+		if(this.speed.x < 0)
 			this.direction = -1;
 		
 	};
 
 	limits(limits) {
-		if(this.position[0] >= 0){
-			if(this.position[0] + this.size[0] > limits.width){
-				this.position[0] = limits.width - this.size[0]
-				this.speed[0] = 0
+		if(this.position.x >= 0){
+			if(this.position.x + this.size.x > limits.width){
+				this.position.x = limits.width - this.size.x
+				this.speed.x = 0
 			}
 		}
 		else{
-			this.position[0] = 0
-			this.speed[0] = 0
+			this.position.x = 0
+			this.speed.x = 0
 		}
 	}
 
 	colide(p){
 		var colidio = 0;
-		if(this.position[0] + this.speed[0] + this.size[0] > p.position[0] && this.position[0] + this.speed[0] < p.position[0] + p.size[0]){
+		if(this.position.x + this.speed.x + this.size.x > p.position.x && this.position.x + this.speed.x < p.position.x + p.size.x){
 			colidio ++;
 		}
-		if(this.position[1] + this.speed[1] < p.position[1] + p.size[1] && this.position[1] + this.size[1]+this.speed[1] > p.position[1]){
+		if(this.position.y + this.speed.y < p.position.y + p.size.y && this.position.y + this.size.y+this.speed.y > p.position.y){
 			colidio ++;
 		}
 		if(colidio == 2){
